@@ -58,6 +58,20 @@ class HitAndBlowGame {
         return Array.from(slots).map(slot => slot.style.backgroundColor);
     }
 
+    // 16進数カラーコードをRGB形式に変換
+    hexToRgb(hex) {
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+        return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    // 色を比較
+    compareColors(color1, color2) {
+        if (!color1 || !color2) return false;
+        return color1.replace(/\s/g, '') === color2.replace(/\s/g, '');
+    }
+
     // HITとBLOWを計算
     calculateResult(currentColors) {
         let hit = 0;
@@ -65,9 +79,12 @@ class HitAndBlowGame {
         const usedAnswer = new Set();
         const usedGuess = new Set();
 
+        // 答えの色をRGB形式に変換
+        const rgbAnswer = this.answer.map(color => this.hexToRgb(color));
+
         // HIT（位置と色が一致）をカウント
         for (let i = 0; i < 4; i++) {
-            if (currentColors[i] === this.answer[i]) {
+            if (this.compareColors(currentColors[i], rgbAnswer[i])) {
                 hit++;
                 usedAnswer.add(i);
                 usedGuess.add(i);
@@ -81,7 +98,7 @@ class HitAndBlowGame {
             for (let j = 0; j < 4; j++) {
                 if (usedAnswer.has(j)) continue;
                 
-                if (currentColors[i] === this.answer[j]) {
+                if (this.compareColors(currentColors[i], rgbAnswer[j])) {
                     blow++;
                     usedAnswer.add(j);
                     break;
