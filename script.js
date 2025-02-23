@@ -39,17 +39,23 @@ class HitAndBlowGame {
     selectColor(color) {
         if (this.currentSlot) {
             this.currentSlot.style.backgroundColor = color;
+            // 選択後、枠線を元に戻してフォーカスを解除
+            this.currentSlot.style.border = '2px solid #ccc';
             this.currentSlot = null;
         }
     }
 
     // スロットを選択したときの処理
     setCurrentSlot(slot) {
-        if (this.currentSlot) {
-            this.currentSlot.style.border = '2px solid #ccc';
-        }
+        // 前に選択していたスロットの枠線を元に戻す
+        const allSlots = document.querySelectorAll('.input-area .color-slot');
+        allSlots.forEach(s => s.style.border = '2px solid #ccc');
+
+        // 新しく選択したスロットの枠線を変更
         this.currentSlot = slot;
-        slot.style.border = '2px solid #000';
+        slot.style.border = '3px solid #000';
+        // 選択中のスロットを目立たせるためにbox-shadowを追加
+        slot.style.boxShadow = '0 0 10px rgba(0,0,0,0.3)';
     }
 
     // 入力された色を取得

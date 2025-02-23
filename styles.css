@@ -41,6 +41,32 @@ h1 {
     border: 2px solid #ccc;
     border-radius: 50%;
     background-color: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.color-slot:hover {
+    border-color: #999;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+
+.input-area .color-slot {
+    position: relative;
+}
+
+.input-area .color-slot::before {
+    content: '+';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.3;
+    font-size: 24px;
+    pointer-events: none;
+}
+
+.input-area .color-slot[style*="background-color"]::before {
+    display: none;
 }
 
 .color-palette {
