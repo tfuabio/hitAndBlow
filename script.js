@@ -39,9 +39,20 @@ class HitAndBlowGame {
     selectColor(color) {
         if (this.currentSlot) {
             this.currentSlot.style.backgroundColor = color;
-            // 選択後、枠線を元に戻してフォーカスを解除
+            // 選択後、枠線を元に戻す
             this.currentSlot.style.border = '2px solid #ccc';
-            this.currentSlot = null;
+            this.currentSlot.style.boxShadow = 'none';
+
+            // 次のスロットを探して選択
+            const slots = Array.from(document.querySelectorAll('.input-area .color-slot'));
+            const currentIndex = slots.indexOf(this.currentSlot);
+            
+            // 次のスロットが存在する場合、そこにフォーカスを移動
+            if (currentIndex < slots.length - 1) {
+                this.setCurrentSlot(slots[currentIndex + 1]);
+            } else {
+                this.currentSlot = null;
+            }
         }
     }
 
