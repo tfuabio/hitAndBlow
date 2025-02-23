@@ -9,6 +9,7 @@ class HitAndBlowGame {
         this.currentAttempt = 0;  // 現在のチャレンジ回数
         
         this.initializeGame();
+        this.initializeHistoryArea(); // 履歴エリアの初期化を追加
     }
 
     // ランダムな答えを生成
@@ -38,6 +39,40 @@ class HitAndBlowGame {
 
         // 最初のスロットを選択状態にする
         this.setCurrentSlot(slots[0]);
+    }
+
+    // 履歴エリアの初期化メソッドを追加
+    initializeHistoryArea() {
+        const historyArea = document.querySelector('.history-area');
+        historyArea.innerHTML = ''; // 既存の内容をクリア
+
+        // 8行分の空の履歴行を作成
+        for (let i = 0; i < this.maxAttempts; i++) {
+            const historyRow = document.createElement('div');
+            historyRow.className = 'history-row';
+            historyRow.dataset.row = i; // 行番号を保存
+            
+            const historyColors = document.createElement('div');
+            historyColors.className = 'history-colors';
+            
+            // 4つの空のカラースロットを作成
+            for (let j = 0; j < 4; j++) {
+                const slot = document.createElement('div');
+                slot.className = 'color-slot';
+                historyColors.appendChild(slot);
+            }
+
+            const historyResult = document.createElement('div');
+            historyResult.className = 'history-result';
+            historyResult.innerHTML = `
+                <span>HIT: 0</span>
+                <span>BLOW: 0</span>
+            `;
+
+            historyRow.appendChild(historyColors);
+            historyRow.appendChild(historyResult);
+            historyArea.appendChild(historyRow);
+        }
     }
 
     // 色を選択したときの処理
@@ -131,32 +166,22 @@ class HitAndBlowGame {
         return { hit, blow };
     }
 
-    // 履歴に追加
+    // 履歴の更新メソッドを修正
     addToHistory(colors, result) {
-        const historyArea = document.querySelector('.history-area');
-        const historyRow = document.createElement('div');
-        historyRow.className = 'history-row';
+        const historyRow = document.querySelector(`.history-row[data-row="${this.currentAttempt - 1}"]`);
+        const colorSlots = historyRow.querySelectorAll('.color-slot');
         
-        const historyColors = document.createElement('div');
-        historyColors.className = 'history-colors';
-        
-        colors.forEach(color => {
-            const slot = document.createElement('div');
-            slot.className = 'color-slot';
-            slot.style.backgroundColor = color;
-            historyColors.appendChild(slot);
+        // 色を設定
+        colorSlots.forEach((slot, index) => {
+            slot.style.backgroundColor = colors[index];
         });
 
-        const historyResult = document.createElement('div');
-        historyResult.className = 'history-result';
+        // 結果を更新
+        const historyResult = historyRow.querySelector('.history-result');
         historyResult.innerHTML = `
             <span>HIT: ${result.hit}</span>
             <span>BLOW: ${result.blow}</span>
         `;
-
-        historyRow.appendChild(historyColors);
-        historyRow.appendChild(historyResult);
-        historyArea.insertBefore(historyRow, historyArea.firstChild);
     }
 
     // 入力をリセット
