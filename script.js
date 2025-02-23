@@ -5,6 +5,8 @@ class HitAndBlowGame {
         this.answer = this.generateAnswer();
         this.currentSlot = null;
         this.history = [];
+        this.maxAttempts = 8;  // 最大チャレンジ回数
+        this.currentAttempt = 0;  // 現在のチャレンジ回数
         
         this.initializeGame();
     }
@@ -179,6 +181,7 @@ class HitAndBlowGame {
             return;
         }
 
+        this.currentAttempt++;  // チャレンジ回数をカウントアップ
         const result = this.calculateResult(currentColors);
         
         // 結果を表示
@@ -188,16 +191,43 @@ class HitAndBlowGame {
         // 履歴に追加
         this.addToHistory(currentColors, result);
 
-        // クリアした場合
+        // 残りチャレンジ回数を表示
+        const remainingAttempts = this.maxAttempts - this.currentAttempt;
+        document.querySelector('.hit').textContent = `HIT: ${result.hit} (残り${remainingAttempts}回)`;
+
+        // クリアまたはゲームオーバー判定
         if (result.hit === 4) {
             alert('おめでとうございます！クリアです！');
+            this.showAnswer();
+            if (confirm('もう一度プレイしますか？')) {
+                location.reload();
+            }
+        } else if (this.currentAttempt >= this.maxAttempts) {
+            alert('ゲームオーバー！8回のチャレンジが終了しました。');
+            this.showAnswer();
             if (confirm('もう一度プレイしますか？')) {
                 location.reload();
             }
         } else {
-            // クリアしていない場合は入力をリセットして最初のスロットを選択
+            // まだチャレンジ可能な場合は入力をリセット
             this.resetInput();
         }
+    }
+
+    // 正解を表示するメソッド
+    showAnswer() {
+        const answerColors = this.answer.map(color => this.hexToRgb(color));
+        const message = '正解は:\n' + answerColors.map(color => {
+            // RGB値を日本語の色名に変換（簡易版）
+            if (color === 'rgb(255, 0, 0)') return '赤';
+            if (color === 'rgb(0, 255, 0)') return '緑';
+            if (color === 'rgb(0, 0, 255)') return '青';
+            if (color === 'rgb(255, 255, 0)') return '黄';
+            if (color === 'rgb(255, 0, 255)') return '紫';
+            if (color === 'rgb(0, 255, 255)') return '水色';
+            return color;
+        }).join(', ');
+        alert(message);
     }
 }
 
