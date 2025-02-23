@@ -209,16 +209,8 @@ class HitAndBlowGame {
         this.currentAttempt++;  // チャレンジ回数をカウントアップ
         const result = this.calculateResult(currentColors);
         
-        // 結果を表示
-        document.querySelector('.hit').textContent = `HIT: ${result.hit}`;
-        document.querySelector('.blow').textContent = `BLOW: ${result.blow}`;
-        
         // 履歴に追加
         this.addToHistory(currentColors, result);
-
-        // 残りチャレンジ回数を表示
-        const remainingAttempts = this.maxAttempts - this.currentAttempt;
-        document.querySelector('.hit').textContent = `HIT: ${result.hit} (残り${remainingAttempts}回)`;
 
         // クリアまたはゲームオーバー判定
         if (result.hit === 4) {
