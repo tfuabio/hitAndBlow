@@ -33,6 +33,9 @@ class HitAndBlowGame {
         // チェックボタンの設定
         const submitBtn = document.querySelector('.submit-btn');
         submitBtn.addEventListener('click', () => this.checkAnswer());
+
+        // 最初のスロットを選択状態にする
+        this.setCurrentSlot(slots[0]);
     }
 
     // 色を選択したときの処理
@@ -154,6 +157,18 @@ class HitAndBlowGame {
         historyArea.insertBefore(historyRow, historyArea.firstChild);
     }
 
+    // 入力をリセット
+    resetInput() {
+        const slots = document.querySelectorAll('.input-area .color-slot');
+        slots.forEach(slot => {
+            slot.style.backgroundColor = '';
+            slot.style.border = '2px solid #ccc';
+            slot.style.boxShadow = 'none';
+        });
+        // 最初のスロットを選択状態にする
+        this.setCurrentSlot(slots[0]);
+    }
+
     // 答え合わせ
     checkAnswer() {
         const currentColors = this.getCurrentColors();
@@ -179,6 +194,9 @@ class HitAndBlowGame {
             if (confirm('もう一度プレイしますか？')) {
                 location.reload();
             }
+        } else {
+            // クリアしていない場合は入力をリセットして最初のスロットを選択
+            this.resetInput();
         }
     }
 }
