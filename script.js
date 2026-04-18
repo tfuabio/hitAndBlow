@@ -1,4 +1,6 @@
-// ゲームの状態を管理するクラス
+/**
+ * ヒットアンドブローゲームの管理クラス
+ */
 class HitAndBlowGame {
     constructor() {
         this.colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
@@ -9,9 +11,8 @@ class HitAndBlowGame {
         this.currentAttempt = 0;  // 現在のチャレンジ回数
         this.stopwatch = null; // ストップウォッチのインスタンスを保持
         
-        this.initializeGame();
+        this.init();
         this.initializeHistoryArea(); // 履歴エリアの初期化を追加
-        //this.hideHtmlComments();
     }
 
     // ストップウォッチのインスタンスをセットするメソッドを追加
@@ -26,7 +27,7 @@ class HitAndBlowGame {
     }
 
     // 初期設定
-    initializeGame() {
+    init() {
         // 色選択用のパレット設定
         const palette = document.querySelector('.color-palette');
         this.colors.forEach(color => {
@@ -39,10 +40,6 @@ class HitAndBlowGame {
         slots.forEach(slot => {
             slot.addEventListener('click', () => this.setCurrentSlot(slot));
         });
-
-        // チェックボタンの設定
-        const submitBtn = document.querySelector('.submit-btn');
-        submitBtn.addEventListener('click', () => this.checkAnswer());
 
         // 最初のスロットを選択状態にする
         this.setCurrentSlot(slots[0]);
@@ -279,15 +276,6 @@ class HitAndBlowGame {
         }).join(', ');
         return message;
     }
-
-    // HTMLコメントを隠す
-    hideHtmlComments() {
-        const comments = document.createTreeWalker(document.body, NodeFilter.SHOW_COMMENT);
-        let comment;
-        while (comment = comments.nextNode()) {
-            comment.textContent = ''; // コメントの内容を空にする
-        }
-    }
 }
 
 /**
@@ -349,14 +337,43 @@ class StopWatch {
     }
 }
 
-// ページが読み込まれたときに実行
-window.onload = () => {
-    // ゲームとストップウォッチのインスタンスを作成
-    const game = new HitAndBlowGame();
-    const stopwatch = new StopWatch(document.getElementById("time"));
-    
-    // ゲームにストップウォッチのインスタンスをセット
-    game.setStopwatch(stopwatch);
+let game = null;
+let stopwatch = null;
 
-    game.start(); // ゲーム開始と同時にストップウォッチもスタート
+// メニュー画面：ゲーム開始ボタン押下
+function startGame() {
+    // ゲーム画面表示
+    document.getElementById('menu-container').style.display = 'none';
+    document.getElementById('game-container').style.display = 'block';
+
+    // ゲーム開始
+    game = new HitAndBlowGame();
+    stopwatch = new StopWatch(document.getElementById("time"));
+    game.setStopwatch(stopwatch);
+    game.start();
+}
+
+// ゲーム画面：メニューボタン押下
+function showMenu() {
+    // ゲームを中止して良いか確認
+    if (confirm('ゲームを中止してメニューに戻りますか？')) {
+        // ゲーム停止
+        if (game) {
+            game.stop();
+        }
+        if (stopwatch) {
+            stopwatch.reset();
+        }
+
+        // メニュー画面表示
+        document.getElementById('menu-container').style.display = 'block';
+        document.getElementById('game-container').style.display = 'none';
+    }
+}
+
+// ゲーム画面：チェックボタン押下
+function check() {
+    if (game) {
+        game.checkAnswer();
+    }
 }
