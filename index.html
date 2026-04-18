@@ -8,14 +8,29 @@
     <script src="script.js" defer></script>
 </head>
 <body>
-    <div class="container">
+    <!-- メニュー画面 -->
+    <div id="menu-container">
         <h1>ヒットアンドブロー</h1>
+        <div class="input-area">
+            <button class="submit-btn" onclick="startGame()">ゲーム開始</button>
+        </div>
+    </div>
+
+    <!-- ゲーム画面 -->
+    <div id="game-container" style="display:none;">
         
+        <!-- タイム表示 -->
+        <div>
+            <span>タイム </span>
+            <span id="time">00:00:00</span>
+            <button class="submit-btn" onclick="showMenu()">メニューに戻る</button>
+        </div>
+
         <!-- 履歴表示エリア -->
         <div class="history-area">
             <!-- JavaScriptで動的に生成 -->
         </div>
-        
+
         <!-- 入力エリア -->
         <div class="input-area">
             <div class="color-slots">
@@ -32,8 +47,9 @@
                 <button class="color-btn" style="background-color: #ff00ff"></button>
                 <button class="color-btn" style="background-color: #00ffff"></button>
             </div>
-            <button class="submit-btn">チェック</button>
+            <button class="submit-btn" onclick="check()">チェック</button>
         </div>
+    </div>
 
     </div>
 </body>

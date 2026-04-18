@@ -9,7 +9,8 @@ body {
     user-select: none;
 }
 
-.container {
+/* ゲームコンテナ */
+#game-container {
     max-width: 600px;
     margin: 0 auto;
     background-color: white;
@@ -71,7 +72,18 @@ h1 {
     gap: 15px;
 }
 
-.input-area {
+/* メニュー画面：入力エリア */
+#menu-container .input-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+/* ゲーム画面：入力エリア */
+#game-container .input-area {
     display: flex;
     flex-direction: column;
     align-items: center;
