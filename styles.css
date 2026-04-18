@@ -3,6 +3,7 @@ body {
     background-color: #f0f0f0;
     margin: 0;
     padding: 20px;
+    height: 100vh;
 }
 
 .container {
@@ -30,9 +31,18 @@ h1 {
 
 .input-area {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     gap: 10px;
-    margin: 20px 0;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    z-index: 10;
 }
 
 .color-slot {
@@ -48,6 +58,12 @@ h1 {
 .color-slot:hover {
     border-color: #999;
     box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+
+.color-slots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
 }
 
 .input-area .color-slot {
@@ -91,7 +107,6 @@ h1 {
 
 .submit-btn {
     display: block;
-    margin: 20px auto;
     padding: 10px 30px;
     font-size: 1.1em;
     background-color: #4CAF50;
