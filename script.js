@@ -10,6 +10,7 @@ class HitAndBlowGame {
         
         this.initializeGame();
         this.initializeHistoryArea(); // 履歴エリアの初期化を追加
+        //this.hideHtmlComments();
     }
 
     // ランダムな答えを生成
@@ -245,6 +246,16 @@ class HitAndBlowGame {
             return color;
         }).join(', ');
         alert(message);
+    }
+
+
+    // HTMLコメントを隠す
+    hideHtmlComments() {
+        const comments = document.createTreeWalker(document.body, NodeFilter.SHOW_COMMENT);
+        let comment;
+        while (comment = comments.nextNode()) {
+            comment.textContent = ''; // コメントの内容を空にする
+        }
     }
 }
 

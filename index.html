@@ -2,39 +2,39 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>カラーヒットアンドブロー</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ヒットアンドブロー</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
     <div class="container">
-        <h1>カラーヒットアンドブロー</h1>
+        <h1>ヒットアンドブロー</h1>
         
-        <div class="input-area">
-            <div class="color-slot"></div>
-            <div class="color-slot"></div>
-            <div class="color-slot"></div>
-            <div class="color-slot"></div>
-        </div>
-
-        <div class="color-palette">
-            <button class="color-btn" style="background-color: #ff0000"></button>
-            <button class="color-btn" style="background-color: #00ff00"></button>
-            <button class="color-btn" style="background-color: #0000ff"></button>
-            <button class="color-btn" style="background-color: #ffff00"></button>
-            <button class="color-btn" style="background-color: #ff00ff"></button>
-            <button class="color-btn" style="background-color: #00ffff"></button>
-        </div>
-
-        <button class="submit-btn">チェック</button>
-
+        <!-- 履歴表示エリア -->
         <div class="history-area">
-            <!-- 既存の1行を削除し、JavaScriptで動的に生成します -->
+            <!-- JavaScriptで動的に生成 -->
         </div>
-    </div>
+        
+        <!-- 入力エリア -->
+        <div class="input-area">
+            <div class="color-slots">
+                <div class="color-slot"></div>
+                <div class="color-slot"></div>
+                <div class="color-slot"></div>
+                <div class="color-slot"></div>
+            </div>
+            <div class="color-palette">
+                <button class="color-btn" style="background-color: #ff0000"></button>
+                <button class="color-btn" style="background-color: #00ff00"></button>
+                <button class="color-btn" style="background-color: #0000ff"></button>
+                <button class="color-btn" style="background-color: #ffff00"></button>
+                <button class="color-btn" style="background-color: #ff00ff"></button>
+                <button class="color-btn" style="background-color: #00ffff"></button>
+            </div>
+            <button class="submit-btn">チェック</button>
+        </div>
 
-    <!-- JavaScript読み込み -->
-    <script src="script.js"></script>
-    
+    </div>
 </body>
 </html>

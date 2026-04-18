@@ -2,19 +2,29 @@ body {
     font-family: 'Arial', sans-serif;
     background-color: #f0f0f0;
     margin: 0;
-    padding: 20px;
+    height: 100vh;
+    
+    /* テキスト選択を防ぐ */
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .container {
     max-width: 600px;
     margin: 0 auto;
     background-color: white;
-    padding: 20px;
+    padding: 20px 20px 100px 20px; /* 下部にinput-area分の余白を追加 */
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    height: 100vh;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 h1 {
+    margin: 0;
     text-align: center;
     color: #333;
 }
@@ -28,87 +38,12 @@ h1 {
     font-weight: bold;
 }
 
-.input-area {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin: 20px 0;
-}
-
-.color-slot {
-    width: 50px;
-    height: 50px;
-    border: 2px solid #ccc;
-    border-radius: 50%;
-    background-color: #fff;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.color-slot:hover {
-    border-color: #999;
-    box-shadow: 0 0 5px rgba(0,0,0,0.2);
-}
-
-.input-area .color-slot {
-    position: relative;
-}
-
-.input-area .color-slot::before {
-    content: '+';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0.3;
-    font-size: 24px;
-    pointer-events: none;
-}
-
-.input-area .color-slot[style*="background-color"]::before {
-    display: none;
-}
-
-.color-palette {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin: 20px 0;
-}
-
-.color-btn {
-    width: 40px;
-    height: 40px;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: transform 0.2s;
-}
-
-.color-btn:hover {
-    transform: scale(1.1);
-}
-
-.submit-btn {
-    display: block;
-    margin: 20px auto;
-    padding: 10px 30px;
-    font-size: 1.1em;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.submit-btn:hover {
-    background-color: #45a049;
-}
-
 .history-area {
-    margin-top: 30px;
-    border-top: 2px solid #eee;
-    padding-top: 20px;
+    margin-bottom: 150px; /* input-areaと重ならないように下余白追加 */
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: 100%;
+    overflow-y: auto;
 }
 
 .history-row {
@@ -134,4 +69,96 @@ h1 {
 .history-result {
     display: flex;
     gap: 15px;
+}
+
+.input-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    z-index: 10;
+}
+
+.color-slot {
+    width: 50px;
+    height: 50px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    background-color: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.color-slot:hover {
+    border-color: #999;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+
+.color-slots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.input-area .color-slot {
+    position: relative;
+}
+
+.input-area .color-slot::before {
+    content: '+';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.3;
+    font-size: 24px;
+    pointer-events: none;
+}
+
+.input-area .color-slot[style*="background-color"]::before {
+    display: none;
+}
+
+.color-palette {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.color-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s;
+    touch-action: manipulation;
+}
+
+.color-btn:hover {
+    transform: scale(1.1);
+}
+
+.submit-btn {
+    display: block;
+    padding: 10px 30px;
+    font-size: 1.1em;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.submit-btn:hover {
+    background-color: #45a049;
 }
