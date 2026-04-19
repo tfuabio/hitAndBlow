@@ -74,8 +74,13 @@ class HitAndBlowGame {
         const historyRows = this.historyArea.querySelectorAll('.history-row');
         historyRows.forEach(row => {
             const rowIndex = parseInt(row.dataset.row);
+
+            // 現在のチャレンジ回数と行番号が一致
             if (rowIndex === this.currentAttempt) {
+                // フォーカスを当てる
                 row.classList.add('current');
+                // スクロールして表示する
+                row.scrollIntoView({ behavior: 'smooth', block: 'center' });
             } else {
                 row.classList.remove('current');
             }
