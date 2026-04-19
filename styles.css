@@ -75,9 +75,18 @@ body {
     height: 30px;
 }
 .history-result {
-    display: flex;
+    text-align: right;
     gap: 15px;
 }
+.history-result .hit.hightlight {
+    color: red;
+    font-weight: bold;
+}
+.history-result .blow.hightlight {
+    color: blue;
+    font-weight: bold;
+}
+
 
 /* 入力エリア */
 .input-area {
