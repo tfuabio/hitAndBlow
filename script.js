@@ -120,20 +120,28 @@ class HitAndBlowGame {
 
         // MAX_ATTEMPTS行分の空の履歴行を作成
         for (let i = 0; i < HitAndBlowGame.MAX_ATTEMPTS; i++) {
+
+            // 履歴行の要素を作成
             const historyRow = document.createElement('div');
             historyRow.className = 'history-row';
             historyRow.dataset.row = i; // 行番号を保存
-            
+
+            // チャレンジ回数表示（左上に小さく）
+            const attemptNumber = document.createElement('div');
+            attemptNumber.className = 'attempt-number';
+            attemptNumber.textContent = (i + 1).toString();
+            historyRow.appendChild(attemptNumber);
+
+            // 4つの空のカラースロットを含む履歴行のHTML構造を生成
             const historyColors = document.createElement('div');
             historyColors.className = 'history-colors';
-            
-            // 4つの空のカラースロットを作成
             for (let j = 0; j < 4; j++) {
                 const slot = document.createElement('div');
                 slot.className = 'color-slot';
                 historyColors.appendChild(slot);
             }
 
+            // HITとBLOWの表示エリアを生成
             const historyResult = document.createElement('div');
             historyResult.className = 'history-result';
             historyResult.innerHTML = `
@@ -143,9 +151,10 @@ class HitAndBlowGame {
                 <span>BLOW: </span>
                 <span class="blow">0</span>
             `;
-
             historyRow.appendChild(historyColors);
             historyRow.appendChild(historyResult);
+
+            // 履歴エリアに行を追加
             this.historyArea.appendChild(historyRow);
         }
     }
