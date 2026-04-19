@@ -1,3 +1,18 @@
+/* チャレンジ回数の小さい数字 */
+.attempt-number {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 1em;
+    text-align: center;
+    font-size: 0.8em;
+    color: #888;
+    background: transparent;
+    z-index: 2;
+    pointer-events: none;
+    background-color: greenyellow;
+}
+
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f0f0f0;
@@ -59,6 +74,7 @@ body {
     padding: 10px;
     background-color: #f9f9f9;
     border-radius: 5px;
+    position: relative;
 }
 .history-row.current {
     font-size: 1.2em;
