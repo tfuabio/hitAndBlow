@@ -137,8 +137,11 @@ class HitAndBlowGame {
             const historyResult = document.createElement('div');
             historyResult.className = 'history-result';
             historyResult.innerHTML = `
-                <span>HIT: 0</span>
-                <span>BLOW: 0</span>
+                <span>HIT: </span>
+                <span class="hit">0</span>
+                <br>
+                <span>BLOW: </span>
+                <span class="blow">0</span>
             `;
 
             historyRow.appendChild(historyColors);
@@ -256,7 +259,7 @@ class HitAndBlowGame {
 
     // 履歴の更新メソッドを修正
     addToHistory(colors, result) {
-        const historyRow = document.querySelector(`.history-row[data-row="${this.currentAttempt - 1}"]`);
+        const historyRow = this.historyArea.querySelector(`.history-row[data-row="${this.currentAttempt - 1}"]`);
         const colorSlots = historyRow.querySelectorAll('.color-slot');
         
         // 色を設定
@@ -266,10 +269,17 @@ class HitAndBlowGame {
 
         // 結果を更新
         const historyResult = historyRow.querySelector('.history-result');
-        historyResult.innerHTML = `
-            <span>HIT: ${result.hit}</span>
-            <span>BLOW: ${result.blow}</span>
-        `;
+
+        historyResult.querySelector('.hit').textContent = result.hit;
+        historyResult.querySelector('.blow').textContent = result.blow;
+
+        if (0 < result.hit) {
+            historyResult.querySelector('.hit').classList.add('hightlight');
+        }
+        if (0 < result.blow) {
+            historyResult.querySelector('.blow').classList.add('hightlight');
+        }
+
     }
 
     // 答え合わせ
