@@ -44,13 +44,13 @@ body {
     font-weight: bold;
 }
 
+/* 履歴エリア */
 .history-area {
     flex: 1 1 auto;
     min-height: 0;
     max-height: 50vh;
     overflow-y: auto;
 }
-
 .history-row {
     display: flex;
     align-items: center;
@@ -60,17 +60,20 @@ body {
     background-color: #f9f9f9;
     border-radius: 5px;
 }
-
+.history-row.current {
+    font-size: 1.2em;
+    font-weight: bold;
+    background-color: #ffff00;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
 .history-colors {
     display: flex;
     gap: 10px;
 }
-
 .history-colors .color-slot {
     width: 30px;
     height: 30px;
 }
-
 .history-result {
     display: flex;
     gap: 15px;
