@@ -2,13 +2,15 @@
  * ヒットアンドブローゲームの管理クラス
  */
 class HitAndBlowGame {
-    constructor(stopwatch) {
+    constructor(stopwatch, option) {
         // 使用する色の配列
         this.colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
         // 最大チャレンジ回数
         this.maxAttempts = 8;
         // ストップウォッチのインスタンス
         this.stopwatch = stopwatch;
+        // ゲームオプション
+        this.option = option;
 
         // 色選択用のパレットの要素を取得
         this.inputPalette = document.querySelector('.color-palette');
@@ -18,6 +20,11 @@ class HitAndBlowGame {
         this.historyArea = document.querySelector('.history-area');
         // イベントリスナーの設定
         this.setupEventListeners();
+    }
+
+    // ゲームオプションの設定
+    setOption(option) {
+        this.option = option;
     }
 
     // 初期化処理
@@ -114,8 +121,25 @@ class HitAndBlowGame {
 
     // ランダムな答えを生成
     generateAnswer() {
-        const shuffled = [...this.colors].sort(() => Math.random() - 0.5);
-        return shuffled.slice(0, 4);
+        // 重複ありの場合は、colorsからランダムに4つの色を選ぶ
+        if (this.option === 'duplicate') {
+            const answer = [];
+            for (let i = 0; i < 4; i++) {
+                const randomColor = this.colors[Math.floor(Math.random() * this.colors.length)];
+                answer.push(randomColor);
+            }
+            return answer;
+        }
+        // 重複ありの場合は、colorsからランダムに4つの色を選ぶ
+        else if (this.option === 'unique') {
+            const shuffled = [...this.colors].sort(() => Math.random() - 0.5);
+            return shuffled.slice(0, 4);
+        }
+        // デフォルトは重複なし
+        else {
+            const shuffled = [...this.colors].sort(() => Math.random() - 0.5);
+            return shuffled.slice(0, 4);
+        }
     }
 
     // 色を選択したときの処理
@@ -360,14 +384,32 @@ let game = null;
 
 // メニュー画面：ゲーム開始ボタン押下
 function pressStart() {
+    // オプションの値を取得
+    const option = document.getElementById('option').value;
+
     // ゲーム画面表示
     document.getElementById('menu-container').style.display = 'none';
     document.getElementById('game-container').style.display = 'block';
 
+    // モード表示
+    const modeElement = document.getElementById('mode');
+    if (option === 'duplicate') {
+        modeElement.textContent = '重複あり';
+        modeElement.className = 'duplicate';
+    } else if (option === 'unique') {
+        modeElement.textContent = '重複なし';
+        modeElement.className = 'unique';
+    } else {
+        modeElement.textContent = '重複なし';
+        modeElement.className = 'unique';
+    }
+
     // ゲーム開始
-    if (!game) {
+    if (game) {
+        game.setOption(option);
+    } else {
         const stopwatch = new StopWatch(document.getElementById("time"));
-        game = new HitAndBlowGame(stopwatch);
+        game = new HitAndBlowGame(stopwatch, option);
     }
     game.init();
     game.start();
@@ -400,3 +442,15 @@ function check() {
         game.checkAnswer();
     }
 }
+
+// オプション変更時の処理
+document.getElementById('option').addEventListener('change', (event) => {
+    const option = event.target.value;
+    if (option === 'duplicate') {
+        event.target.className = 'duplicate';
+    } else if (option === 'unique') {
+        event.target.className = 'unique';
+    } else {
+        event.target.className = 'unique';
+    }
+});
