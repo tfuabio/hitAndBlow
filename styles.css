@@ -9,25 +9,30 @@ body {
     user-select: none;
 }
 
-/* ゲームコンテナ */
-#game-container {
-    max-width: 600px;
-    margin: 0 auto;
+/* オプション選択 */
+#option {
+    padding: 5px;
+    font-size: 1em;
+    border-radius: 5px;
+    border: 1px solid #ccc;
     background-color: white;
-    padding: 20px 20px 100px 20px; /* 下部にinput-area分の余白を追加 */
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    height: 100vh;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+    cursor: pointer;
+}
+/* モード表示: 重複なし */
+.unique {
+    color: blue;
+    font-weight: bold;
+}
+/* モード表示: 重複あり */
+.duplicate {
+    color: red;
+    font-weight: bold;
 }
 
-h1 {
-    margin: 0;
-    text-align: center;
-    color: #333;
+/* タイマー表示 */
+#time {
+    font-size: 1.2em;
+    font-weight: bold;
 }
 
 .result-area {
@@ -71,31 +76,70 @@ h1 {
     gap: 15px;
 }
 
-/* メニュー画面：入力エリア */
-#menu-container .input-area {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: #f0f0f0;
-}
-
-/* ゲーム画面：入力エリア */
-#game-container .input-area {
+/* 入力エリア */
+.input-area {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    background-color: white;
+}
+
+/* メニュー画面：入力エリア */
+#menu-container .input-area {
+    justify-content: center;
+    width: 80%;
+    height: 50vh;
+    background-color: #f0f0f0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+#menu-container .input-area h1 {
+    margin: 0;
+    text-align: center;
+    color: #333;
+}
+
+/* ゲーム画面 */
+#game-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px 20px 100px 20px; /* 下部にinput-area分の余白を追加 */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    height: 100vh;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+#game-container .input-area {
     position: fixed;
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: white;
     padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    z-index: 10;
+}
+#game-container .input-area .color-slot {
+    position: relative;
+}
+#game-container .input-area .color-slot::before {
+    content: '+';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.3;
+    font-size: 24px;
+    pointer-events: none;
+}
+#game-container .input-area .color-slot[style*="background-color"]::before {
+    display: none;
 }
 
 .color-slot {
@@ -117,25 +161,6 @@ h1 {
     display: flex;
     justify-content: center;
     gap: 10px;
-}
-
-.input-area .color-slot {
-    position: relative;
-}
-
-.input-area .color-slot::before {
-    content: '+';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0.3;
-    font-size: 24px;
-    pointer-events: none;
-}
-
-.input-area .color-slot[style*="background-color"]::before {
-    display: none;
 }
 
 .color-palette {

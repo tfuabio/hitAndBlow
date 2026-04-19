@@ -10,9 +10,13 @@
 <body>
     <!-- メニュー画面 -->
     <div id="menu-container">
-        <h1>ヒットアンドブロー</h1>
         <div class="input-area">
+            <h1>ヒットアンドブロー</h1>
             <button class="submit-btn" onclick="pressStart()">ゲーム開始</button>
+            <select id="option" class="unique">
+                <option value="unique">重複なし</option>
+                <option value="duplicate">重複あり</option>
+            </select>
         </div>
     </div>
 
@@ -20,10 +24,15 @@
     <div id="game-container" style="display:none;">
         
         <!-- タイム表示 -->
-        <div>
-            <span>タイム </span>
-            <span id="time">00:00:00</span>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
             <button class="submit-btn" onclick="pressMenu()">メニューに戻る</button>
+            <div>
+                <span>モード: </span>
+                <span id="mode"></span>
+                <br>
+                <span>タイム: </span>
+                <span id="time">00:00:00</span>
+            </div>
         </div>
 
         <!-- 履歴表示エリア -->
