@@ -381,6 +381,8 @@ class HitAndBlowGame {
  * タイマーは10ミリ秒ごとに更新され、分:秒:ミリ秒の形式で表示される。
  */
 class StopWatch {
+    static INTERVAL = 123;   // タイマーの更新間隔（ミリ秒）
+
     constructor(display) {
         this.display = display;     // 表示用の要素
         this.elapsed = 0;           // 経過時間（ミリ秒）
@@ -393,7 +395,7 @@ class StopWatch {
         // タイマー開始時の基準時間を設定
         this.startTime = Date.now() - this.elapsed;
         // 10ミリ秒ごとにupdateメソッドを呼び出すタイマーを開始
-        this.timer = setInterval(() => this.update(), 10);
+        this.timer = setInterval(() => this.update(), StopWatch.INTERVAL);
     }
 
     stop() {
@@ -419,10 +421,10 @@ class StopWatch {
     }
 
     update() {
-        let now = Date.now() - this.startTime;
-        let ms = Math.floor((now % 1000) / 10);
-        let sec = Math.floor((now / 1000) % 60);
-        let min = Math.floor((now / 60000));
+        let elapsedTime = Date.now() - this.startTime;
+        let ms = Math.floor((elapsedTime % 1000) / 10);
+        let sec = Math.floor((elapsedTime / 1000) % 60);
+        let min = Math.floor((elapsedTime / 60000));
         this.display.textContent =
             String(min).padStart(2,'0') + ":" +
             String(sec).padStart(2,'0') + ":" +
