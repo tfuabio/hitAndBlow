@@ -23,7 +23,7 @@ class HitAndBlowGame {
     #currentSlot = null; // 現在選択されているスロット
     #history = [];       // 履歴の配列（各要素は { colors: [...], result: { hit, blow } } の形式）
     #currentAttempt = 0; // 現在のチャレンジ回数
-    
+    #focusHistoryRowElement = null; // フォーカスされている履歴行の要素
 
     constructor(stopwatch, option) {
         this.#stopwatch = stopwatch;
@@ -90,6 +90,8 @@ class HitAndBlowGame {
                 row.classList.add('current');
                 // スクロールして表示する
                 row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // フォーカスされている行の要素を保存
+                this.#focusHistoryRowElement = row;
             } else {
                 row.classList.remove('current');
             }
@@ -193,11 +195,23 @@ class HitAndBlowGame {
 
     // 色を選択したときの処理
     #selectColor(color) {
+        // 現在選択されているスロットがある場合
         if (this.#currentSlot) {
+            // 選択した色をスロットに設定
             this.#currentSlot.style.backgroundColor = color;
             // 選択後、枠線を元に戻す
             this.#currentSlot.style.border = '2px solid #ccc';
             this.#currentSlot.style.boxShadow = 'none';
+
+            // フォーカス中の履歴エリアの行に色を反映
+            if (this.#focusHistoryRowElement) {
+                // フォーカスされている履歴行のカラースロットを取得
+                const colorSlots = this.#focusHistoryRowElement.querySelectorAll('.color-slot');
+                // 現在のスロットのインデックスを取得
+                const currentIndex = Array.from(this.#inputSlots).indexOf(this.#currentSlot);
+                // フォーカスされている履歴行の対応するスロットに色を反映
+                colorSlots[currentIndex].style.backgroundColor = color;
+            }
 
             // 次のスロットを探して選択
             const slots = Array.from(this.#inputSlots);
