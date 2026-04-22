@@ -40,7 +40,7 @@ class HitAndBlowGame {
 
     // オプション適用
     #applyOption(option) {
-        this.#slotCount = option.querySelector('#slot-count-option').value; // スロット数オプションの値を取得
+        this.#slotCount = parseInt(option.querySelector('#slot-count-option').value); // スロット数オプションの値を取得
         this.#duplicateOption = option.querySelector('#duplicate-option').value; // 重複オプションの値を取得
 
         // モード表示
