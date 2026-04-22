@@ -26,20 +26,32 @@ body {
 
 /* オプション選択 */
 #option {
-    padding: 5px;
+    min-width: 200px;
+    text-align: right;
+    line-height: 3em;
+    padding: 15px;
     font-size: 1em;
     border-radius: 5px;
     border: 1px solid #ccc;
     background-color: white;
     cursor: pointer;
 }
-/* モード表示: 重複なし */
-.unique {
+#option select {
+    width: 150px;
+    margin-left: 10px;
+    padding: 5px;
+    font-size: 1em;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: white;
+}
+/* 難易度：ノーマル */
+.normal {
     color: blue;
     font-weight: bold;
 }
-/* モード表示: 重複あり */
-.duplicate {
+/* 難易度：ハード */
+.hard {
     color: red;
     font-weight: bold;
 }
@@ -86,7 +98,7 @@ body {
     display: flex;
     gap: 10px;
 }
-.history-colors .color-slot {
+.history-colors .input-slot {
     width: 30px;
     height: 30px;
 }
@@ -153,10 +165,10 @@ body {
     transform: translateX(-50%);
     padding: 10px;
 }
-#game-container .input-area .color-slot {
+#game-container .input-area .input-slot {
     position: relative;
 }
-#game-container .input-area .color-slot::before {
+#game-container .input-area .input-slot::before {
     content: '+';
     position: absolute;
     top: 50%;
@@ -166,11 +178,11 @@ body {
     font-size: 24px;
     pointer-events: none;
 }
-#game-container .input-area .color-slot[style*="background-color"]::before {
+#game-container .input-area .input-slot[style*="background-color"]::before {
     display: none;
 }
 
-.color-slot {
+.input-slot {
     width: 50px;
     height: 50px;
     border: 2px solid #ccc;
@@ -180,12 +192,12 @@ body {
     transition: all 0.2s ease;
 }
 
-.color-slot:hover {
+.input-slot:hover {
     border-color: #999;
     box-shadow: 0 0 5px rgba(0,0,0,0.2);
 }
 
-.color-slots {
+.input-slots {
     display: flex;
     justify-content: center;
     gap: 10px;

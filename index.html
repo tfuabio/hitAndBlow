@@ -11,12 +11,30 @@
     <!-- メニュー画面 -->
     <div id="menu-container">
         <div class="input-area">
+
             <h1>ヒットアンドブロー</h1>
             <button class="submit-btn" onclick="pressStart()">ゲーム開始</button>
-            <select id="option" class="unique">
-                <option value="unique">重複なし</option>
-                <option value="duplicate">重複あり</option>
-            </select>
+
+            <!-- オプション -->
+            <div id="option">
+                
+                <!-- スロット数オプション -->
+                <span>スロット数: </span>
+                <select id="slot-count-option" class="normal">
+                    <option value="4" selected>4</option>
+                    <option value="5">5</option>
+                </select>
+
+                <br>
+                
+                <!-- 重複オプション -->
+                <span>色の重複: </span>
+                <select id="duplicate-option" class="normal">
+                    <option value="unique" selected>重複なし</option>
+                    <option value="duplicate">重複あり</option>
+                </select>
+            </div>
+
         </div>
     </div>
 
@@ -42,19 +60,13 @@
 
         <!-- 入力エリア -->
         <div class="input-area">
-            <div class="color-slots">
-                <div class="color-slot"></div>
-                <div class="color-slot"></div>
-                <div class="color-slot"></div>
-                <div class="color-slot"></div>
+            <!-- 入力スロット -->
+            <div class="input-slots">
+                <!-- JavaScriptで動的に生成 -->
             </div>
+            <!-- 色選択パレット -->
             <div class="color-palette">
-                <button class="color-btn" style="background-color: #ff0000"></button>
-                <button class="color-btn" style="background-color: #00ff00"></button>
-                <button class="color-btn" style="background-color: #0000ff"></button>
-                <button class="color-btn" style="background-color: #ffff00"></button>
-                <button class="color-btn" style="background-color: #ff00ff"></button>
-                <button class="color-btn" style="background-color: #00ffff"></button>
+                <!-- JavaScriptで動的に生成 -->
             </div>
             <button class="submit-btn" onclick="check()">チェック</button>
         </div>

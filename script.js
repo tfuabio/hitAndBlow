@@ -14,8 +14,10 @@ class HitAndBlowGame {
     // 最大チャレンジ回数
     static #MAX_ATTEMPTS = 8;
 
+    #slotCount = 4;     // 入力スロット数
     #stopwatch = null;   // ストップウォッチのインスタンス
-    #option = 'unique';  // ゲームオプション（重複あり/なし）
+    #option = null;      // オプション
+    #duplicateOption = 'unique';  // ゲームオプション（重複あり/なし）
     #inputPalette = null; // 色選択用のパレットの要素
     #inputSlots = null;   // 入力スロットの要素
     #historyArea = null;  // 履歴エリアの要素
@@ -26,25 +28,68 @@ class HitAndBlowGame {
     #focusHistoryRowElement = null; // フォーカスされている履歴行の要素
 
     constructor(stopwatch, option) {
+        // ストップウォッチ
         this.#stopwatch = stopwatch;
+        // オプション
         this.#option = option;
         // 色選択用のパレットの要素を取得
         this.#inputPalette = document.querySelector('.color-palette');
-        // 入力スロットの要素を取得
-        this.#inputSlots = document.querySelectorAll('.input-area .color-slot');
         // 履歴エリアの要素を取得
         this.#historyArea = document.querySelector('.history-area');
-        // イベントリスナーの設定
-        this.#setupEventListeners();
+    }
+
+    // オプション適用
+    #applyOption(option) {
+        this.#slotCount = option.querySelector('#slot-count-option').value; // スロット数オプションの値を取得
+        this.#duplicateOption = option.querySelector('#duplicate-option').value; // 重複オプションの値を取得
+
+        // モード表示
+        const modeElement = document.getElementById('mode');
+        if (this.#duplicateOption === 'duplicate') {
+            modeElement.textContent = '重複あり';
+            modeElement.className = 'hard';
+        } else if (this.#duplicateOption === 'unique') {
+            modeElement.textContent = '重複なし';
+            modeElement.className = 'normal';
+        } else {
+            modeElement.textContent = '重複なし';
+            modeElement.className = 'normal';
+        }
+    }
+
+
+    // 入力スロットのHTML生成
+    #initInputSlotsHtml() {
+        const inputSlots = document.querySelector('.input-area .input-slots');
+        inputSlots.innerHTML = ''; // 既存の内容をクリア
+
+        // 入力スロットを作成
+        for (let i = 0; i < this.#slotCount; i++) {
+            const inputSlot = document.createElement('div');
+            inputSlot.className = 'input-slot';
+            inputSlot.onclick = () => this.#setCurrentInputSlot(inputSlot);
+            inputSlot.style.backgroundColor = '';
+            inputSlot.style.border = '2px solid #ccc';
+            inputSlot.style.boxShadow = 'none';
+            inputSlots.appendChild(inputSlot);
+        }
+
+        // 入力スロットの要素を保持
+        this.#inputSlots = inputSlots.querySelectorAll('.input-slot');
+    
+        // 最初のスロットを選択状態にする
+        this.#setCurrentInputSlot(this.#inputSlots[0]);
     }
 
     // ゲームオプションの設定
     setOption(option) {
-        this.#option = option;
+        this.#duplicateOption = option;
     }
 
     // 初期化処理
     init() {
+        // オプション適用
+        this.#applyOption(this.#option);
         // 正解の色の配列
         this.#answer = this.#generateAnswer();
         // 現在選択されているスロット
@@ -58,21 +103,14 @@ class HitAndBlowGame {
             this.#stopwatch.reset();
         }
 
-        // 入力エリアの初期化
-        {
-            // 入力スロットをリセット
-            this.#inputSlots.forEach(slot => {
-                slot.style.backgroundColor = '';
-                slot.style.border = '2px solid #ccc';
-                slot.style.boxShadow = 'none';
-            });
-    
-            // 最初のスロットを選択状態にする
-            this.#setCurrentInputSlot(this.#inputSlots[0]);
-        }
+        // 入力スロットの初期化
+        this.#initInputSlotsHtml();
+
+        // 色選択用のパレットの初期化
+        this.#initInputPaletteHtml();
 
         // 履歴エリアのHTMLを生成
-        this.#generateHistoryHTML();
+        this.#generateHistoryHtml();
 
         // チャレンジ回数に応じて履歴をフォーカス
         this.#focusHistory();
@@ -107,26 +145,18 @@ class HitAndBlowGame {
 
     // ゲーム停止
     stop() {
+        // ストップウォッチを停止
         if (this.#stopwatch) {
             this.#stopwatch.stop();
         }
-    }
-
-    // イベントリスナーの設定
-    #setupEventListeners() {
-        // 色選択用のパレットのクリックイベント設定
-        HitAndBlowGame.#COLORS.forEach(color => {
-            const btn = this.#inputPalette.querySelector(`button[style*="${color}"]`);
-            btn.addEventListener('click', () => this.#selectColor(color));
-        });
-        // 入力スロットのクリックイベント設定
-        this.#inputSlots.forEach(slot => {
-            slot.addEventListener('click', () => this.#setCurrentInputSlot(slot));
-        });
+        // 履歴表示をリセット
+        this.#historyArea.innerHTML = '';
+        // 入力スロットをリセット
+        this.#inputSlots.innerHTML = '';
     }
 
     // 履歴エリアのHTML生成
-    #generateHistoryHTML() {
+    #generateHistoryHtml() {
         this.#historyArea.innerHTML = ''; // 既存の内容をクリア
 
         // MAX_ATTEMPTS行分の空の履歴行を作成
@@ -143,12 +173,12 @@ class HitAndBlowGame {
             attemptNumber.textContent = (i + 1).toString();
             historyRow.appendChild(attemptNumber);
 
-            // 4つの空のカラースロットを含む履歴行のHTML構造を生成
+            // 空のカラースロットを含む履歴行のHTML構造を生成
             const historyColors = document.createElement('div');
             historyColors.className = 'history-colors';
-            for (let j = 0; j < 4; j++) {
+            for (let j = 0; j < this.#slotCount; j++) {
                 const slot = document.createElement('div');
-                slot.className = 'color-slot';
+                slot.className = 'input-slot';
                 historyColors.appendChild(slot);
             }
 
@@ -170,26 +200,40 @@ class HitAndBlowGame {
         }
     }
 
+    // 色選択用のパレットのHTML生成
+    #initInputPaletteHtml() {
+        // 既存の内容をクリア
+        this.#inputPalette.innerHTML = '';
+        // 色選択用のパレットのHTML生成
+        HitAndBlowGame.#COLORS.forEach(color => {
+            const btn = document.createElement('button');
+            btn.className = 'color-btn';
+            btn.style.backgroundColor = color;
+            btn.onclick = () => this.#selectColor(color);
+            this.#inputPalette.appendChild(btn);
+        });
+    }
+
     // ランダムな答えを生成
     #generateAnswer() {
-        // 重複ありの場合は、COLORSからランダムに4つの色を選ぶ
-        if (this.#option === 'duplicate') {
+        // 重複ありの場合
+        if (this.#duplicateOption === 'duplicate') {
             const answer = [];
-            for (let i = 0; i < 4; i++) {
+            for (let i = 0; i < this.#slotCount; i++) {
                 const randomColor = HitAndBlowGame.#COLORS[Math.floor(Math.random() * HitAndBlowGame.#COLORS.length)];
                 answer.push(randomColor);
             }
             return answer;
         }
-        // 重複なしの場合は、COLORSからランダムに4つの色を選ぶ
-        else if (this.#option === 'unique') {
+        // 重複なしの場合
+        else if (this.#duplicateOption === 'unique') {
             const shuffled = [...HitAndBlowGame.#COLORS].sort(() => Math.random() - 0.5);
-            return shuffled.slice(0, 4);
+            return shuffled.slice(0, this.#slotCount);
         }
-        // デフォルトは重複なし
+        // デフォルト(重複なし)
         else {
             const shuffled = [...HitAndBlowGame.#COLORS].sort(() => Math.random() - 0.5);
-            return shuffled.slice(0, 4);
+            return shuffled.slice(0, this.#slotCount);
         }
     }
 
@@ -206,7 +250,7 @@ class HitAndBlowGame {
             // フォーカス中の履歴エリアの行に色を反映
             if (this.#focusHistoryRowElement) {
                 // フォーカスされている履歴行のカラースロットを取得
-                const colorSlots = this.#focusHistoryRowElement.querySelectorAll('.color-slot');
+                const colorSlots = this.#focusHistoryRowElement.querySelectorAll('.input-slot');
                 // 現在のスロットのインデックスを取得
                 const currentIndex = Array.from(this.#inputSlots).indexOf(this.#currentSlot);
                 // フォーカスされている履歴行の対応するスロットに色を反映
@@ -263,7 +307,7 @@ class HitAndBlowGame {
         const rgbAnswer = this.#answer.map(color => this.#hexToRgb(color));
 
         // HIT（位置と色が一致）をカウント
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < this.#slotCount; i++) {
             if (this.#compareColors(currentColors[i], rgbAnswer[i])) {
                 hit++;
                 usedAnswer.add(i);
@@ -272,10 +316,10 @@ class HitAndBlowGame {
         }
 
         // BLOW（色のみ一致）をカウント
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < this.#slotCount; i++) {
             if (usedGuess.has(i)) continue;
             
-            for (let j = 0; j < 4; j++) {
+            for (let j = 0; j < this.#slotCount; j++) {
                 if (usedAnswer.has(j)) continue;
                 
                 if (this.#compareColors(currentColors[i], rgbAnswer[j])) {
@@ -292,7 +336,7 @@ class HitAndBlowGame {
     // 履歴の更新メソッドを修正
     #addToHistory(colors, result) {
         const historyRow = this.#historyArea.querySelector(`.history-row[data-row="${this.#currentAttempt - 1}"]`);
-        const colorSlots = historyRow.querySelectorAll('.color-slot');
+        const colorSlots = historyRow.querySelectorAll('.input-slot');
         
         // 色を設定
         colorSlots.forEach((slot, index) => {
@@ -338,7 +382,7 @@ class HitAndBlowGame {
          * クリアまたはゲームオーバー判定
          */
         // すべての色がHITの場合はゲームクリア
-        if (result.hit === 4) {
+        if (result.hit === this.#slotCount) {
             this.stop();
             this.#stopwatch.update(); // タイムを最新に更新
             alert('おめでとうございます！正解です！\n'
@@ -368,7 +412,7 @@ class HitAndBlowGame {
         }
         // まだチャレンジ可能な場合は入力をリセット
         else {
-            const slots = document.querySelectorAll('.input-area .color-slot');
+            const slots = document.querySelectorAll('.input-area .input-slot');
             slots.forEach(slot => {
                 slot.style.backgroundColor = '';
                 slot.style.border = '2px solid #ccc';
@@ -470,28 +514,14 @@ class StopWatch {
 
 // ゲームのインスタンスを保持する変数
 let game = null;
+// オプションの要素を取得
+const option = document.getElementById('option');
 
 // メニュー画面：ゲーム開始ボタン押下
 function pressStart() {
-    // オプションの値を取得
-    const option = document.getElementById('option').value;
-
     // ゲーム画面表示
     document.getElementById('menu-container').style.display = 'none';
     document.getElementById('game-container').style.display = 'block';
-
-    // モード表示
-    const modeElement = document.getElementById('mode');
-    if (option === 'duplicate') {
-        modeElement.textContent = '重複あり';
-        modeElement.className = 'duplicate';
-    } else if (option === 'unique') {
-        modeElement.textContent = '重複なし';
-        modeElement.className = 'unique';
-    } else {
-        modeElement.textContent = '重複なし';
-        modeElement.className = 'unique';
-    }
 
     // ゲーム開始
     if (game) {
@@ -532,14 +562,25 @@ function check() {
     }
 }
 
-// オプション変更時の処理
-document.getElementById('option').addEventListener('change', (event) => {
+// スロット数オプション変更時の処理
+option.querySelector("#slot-count-option").addEventListener('change', (event) => {
     const option = event.target.value;
-    if (option === 'duplicate') {
-        event.target.className = 'duplicate';
-    } else if (option === 'unique') {
-        event.target.className = 'unique';
+    if (option === '4') {
+        event.target.className = 'normal';
+    } else if (option === '5') {
+        event.target.className = 'hard';
     } else {
-        event.target.className = 'unique';
+        event.target.className = 'normal';
+    }
+});
+// 重複オプション変更時の処理
+option.querySelector("#duplicate-option").addEventListener('change', (event) => {
+    const option = event.target.value;
+    if (option === 'unique') {
+        event.target.className = 'normal';
+    } else if (option === 'duplicate') {
+        event.target.className = 'hard';
+    } else {
+        event.target.className = 'normal';
     }
 });
